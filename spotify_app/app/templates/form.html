@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>LiveList</h1>
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <!-- {{ form.hidden_tag() }} -->
+        <p>
+            Trying to decide if you want to see an artist's live performance?<br>
+            Going to a festival and want to get a taste of an artists set?
+        </p>
+        <p>
+            With LiveList you can automatically generate a Spotify or Apple Music playlist of an artist's most commonly performed songs
+        </p>
+        <p>
+            Find an artist on <a href="https://musicbrainz.org/">MusicBrainz.org</a> then navigate to the Details tab where you will find their <b>MBID</b>
+        </p>
+        <p>
+            {{ form.mbid.label }}<span style="color: red;">*</span><br>
+            {{ form.mbid(size=32) }}<br>
+            {% for error in form.mbid.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.name.label }}<span style="color: red;">*</span><br>
+            {{ form.name(size=32) }}<br>
+            {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>What music service do you use? (Spotify only for now)</p>
+        <p>
+            {{ form.platform.label }}<br>
+            {{ form.platform }}<br>
+            {% for error in form.platform.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            Maximum number of songs to be added to playlist<br>
+            <!-- {{ form.max_songs.label }}<br> -->
+            {{ form.max_songs() }}
+        </p>
+        <p>
+            How many past shows would you like us to consider? (Default 5)<br>
+            <!-- {{ form.num_concerts.label }}<br> -->
+            {{ form.num_concerts() }}
+        </p>
+        <p>
+            Did your artist just start a new tour? Enter a start date and shows before that date won't be included.<br> 
+            {{ form.date.label }}<br>
+            {{ form.date() }} (dd/mm/yyyy)
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

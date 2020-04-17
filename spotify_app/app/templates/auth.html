@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>LiveList</h1>
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        <!-- {{ form.hidden_tag() }} -->
+        <p>Please authorize your spotify account</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

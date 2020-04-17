@@ -1,0 +1,29 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - LiveList</title>
+      {% else %}
+      <title>Welcome to LiveList</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>
+            <a href="{{ url_for('auth') }}">Auth</a> 
+            <a href="{{ url_for('submission') }}">Create Playlist</a> 
+            <!--url_for() finds the view functions, in 
+                this case defined in routes.py-->
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
+
