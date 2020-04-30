@@ -5,11 +5,16 @@ import base64
 #import thread
 #from ratelimit import limits, sleep_and_retry
 
+production=1
+
 
 
 
 def req_auth():
-    callback_url="http://localhost:5000/form/".replace('/','%2F')
+    if production:
+        callback_url="https://livelist-42.herokuapp.com/form/".replace('/','%2F')
+    else:
+        callback_url="http://localhost:5000/form/".replace('/','%2F')
     scope="playlist-modify-private"
     client_id="008bb528a0ef4cb8aa389d7bf1c937d5"
     response_type="code"
@@ -21,7 +26,10 @@ def req_auth():
     return url
 
 def get_code():
-    callback_url="http://localhost:5000/form/".replace('/','%2F')
+    if production:
+        callback_url="https://livelist-42.herokuapp.com/form/".replace('/','%2F')
+    else:
+        callback_url="http://localhost:5000/form/".replace('/','%2F')
     scope="playlist-modify-private"
     client_id="008bb528a0ef4cb8aa389d7bf1c937d5"
     response_type='code'
@@ -33,7 +41,10 @@ def get_token(auth_code):
 
     url = "https://accounts.spotify.com/api/token"
 
-    redirect_url='http%3A//localhost%3A5000/form/'
+    if production:
+        redirect_url="https%3A//livelist-42%2Eherokuapp%2Ecom/form/"
+    else:
+        redirect_url='http%3A//localhost%3A5000/form/'
     payload = 'grant_type=authorization_code&code='+auth_code+'&redirect_uri='+redirect_url
     headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
