@@ -105,32 +105,37 @@ def get_access_token_client_credentials():
     return access_token
 
 def search_song(access_token, platform, song):
-    if platform=='Spotify':
-        url="https://api.spotify.com/v1/search?q="+song.replace(' ','+')+"&type=track&market=US"
-        payload = {}
-        headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer '+access_token
-        }
+    try:
+        if platform=='Spotify':
+            url="https://api.spotify.com/v1/search?q="+song.replace(' ','+')+"&type=track&market=US"
+            payload = {}
+            headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer '+access_token
+            }
 
-        response = requests.request("GET", url, headers=headers, data = payload)
-        if (response.status_code!=200):
-            print('Not 200')
-        #print(type(response))
-        data=response.json()
-#        print(data['tracks'])
-        if data['tracks']['items'][0]['name']==song:
-            # print('True')
-            # print(song)
-            uri=data['tracks']['items'][0]['uri']
-            # print(data['tracks']['items'][0]['uri'])
-            return (1,uri)
-        else:
-            # print('False')
-            # print(song)
-            # print('Not the exact song')
-            return (0,song)
+            response = requests.request("GET", url, headers=headers, data = payload)
+            if (response.status_code!=200):
+                print('Not 200')
+            #print(type(response))
+            data=response.json()
+    #        print(data['tracks'])
+            if data['tracks']['items'][0]['name']==song:
+                # print('True')
+                # print(song)
+                uri=data['tracks']['items'][0]['uri']
+                # print(data['tracks']['items'][0]['uri'])
+                return (1,uri)
+            else:
+                # print('False')
+                # print(song)
+                # print('Not the exact song')
+                return (0,song)
+    except:
+        print('error')
+        print(data)
+        return 2
 
 def get_spotify_song_uris(setlistfm_songlist, platform):
     access_token=get_access_token_client_credentials()
@@ -138,12 +143,12 @@ def get_spotify_song_uris(setlistfm_songlist, platform):
     not_found_songs=[]
     for song in setlistfm_songlist:
         res=search_song(access_token, platform, song)
-        print(res)
-        if res[0]:
-            found_songs.append(res[1])
-        else:
-            not_found_songs.append(res[1])
-    
+        if res!=2:    
+            print(res)
+            if res[0]:
+                found_songs.append(res[1])
+            else:
+                not_found_songs.append(res[1])
     return (found_songs,not_found_songs)
 
 def create_playlist(access_token, playlist_name, platform, songlist):
